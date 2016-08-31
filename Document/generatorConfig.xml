@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+	<classPathEntry location="D:\workspace2\jianle_webapp\Document\mysql-connector-java-5.1.30.jar" />
+	<!-- targetRuntime mybatis3 XMLMAPPER 按接口生成 Ibatis2Java5:按ibatis2 SPRING方式生成 -->
+	<context id="db1" targetRuntime="MyBatis3">
+		<!-- 不生成注释 -->
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+		<!-- 数据库连接 -->
+
+		<!-- ijlw DB Connecton -->
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://192.168.1.254:3306/ijlw?autoCommit=true" userId="root" password="chfr123" />
+		<!-- 数据表对应的model 层 -->
+		<javaModelGenerator targetPackage="com.jianle.dal.model" targetProject="D:/workspace2/jianle_webapp/dal/src/main/java" />
+
+		<!-- sql mapper 映射配置文件 -->
+		<sqlMapGenerator targetPackage="mybatis" targetProject="D:/workspace2/jianle_webapp/dal/src/main/resources"/>
+
+		<!-- 在ibatis2 中是dao层，但在mybatis3中，其实就是mapper接口 -->
+		<javaClientGenerator type="XMLMAPPER" targetPackage="com.jianle.dal.mapper" targetProject="D:/workspace2/jianle_webapp/dal/src/main/java" />
+
+		<table  tableName="sys_user" domainObjectName="SysUser" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false">
+	    </table>
+	    <!-- 执行命令 -->
+	    <!--  java -jar mybatis-generator-core-1.3.2.jar -configfile generatorConfig.xml -overwrite  -->
+	</context>
+</generatorConfiguration>

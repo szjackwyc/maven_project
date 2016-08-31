@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://mybatis.org/schema/mybatis-spring
+        http://mybatis.org/schema/mybatis-spring.xsd">
+        
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+    	<property name="url" value="${master.jdbc.url}" />
+    	<property name="username" value="${master.jdbc.username}" />
+		<property name="password" value="${master.jdbc.password}" />
+
+		<property name="initialSize" value="${master.jdbc.initialSize}" />
+		<property name="minIdle" value="${master.jdbc.minIdle}" />
+		<property name="maxActive" value="${master.jdbc.maxActive}" />
+
+		<property name="maxWait" value="60000" />
+
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+
+		<property name="poolPreparedStatements" value="false" />
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+		<property name="proxyFilters">
+			<list>
+				<ref bean="log-filter" />
+				<ref bean="log-filter-comment" />
+				<ref bean="log-filter-log4j" />
+			</list>
+		</property>
+    </bean>
+	<!-- 自动扫描 -->  
+    <context:component-scan base-package="com/jianle/service" />  
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
+       <property name="dataSource" ref="dataSource" />  
+       <!-- 自动扫描mapping.xml文件 -->  
+       <property name="mapperLocations" value="classpath:mybatis/*.xml" />  
+    </bean>  
+    <!-- DAO接口所在包名，Spring会自动查找其下的类 -->  
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">  
+       <property name="basePackage" value="com.jianle.dal.mapper" />  
+       <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />  
+    </bean> 
+    <!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->  
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">  
+       <property name="dataSource" ref="dataSource" />  
+    </bean>
+    
+    <bean id="log-filter" class="com.alibaba.druid.filter.logging.Slf4jLogFilter">
+		<property name="statementLogEnabled" value="false" />
+		<property name="statementExecutableSqlLogEnable" value="false"/>
+		<property name="connectionLogEnabled" value="false"/>
+		<property name="dataSourceLogEnabled" value="false"/>
+		<property name="resultSetLogEnabled" value="false"/>
+	</bean>
+	
+	<bean id="log-filter-comment" class="com.alibaba.druid.filter.logging.CommonsLogFilter">
+		<property name="statementLogEnabled" value="false" />
+		<property name="statementExecutableSqlLogEnable" value="false"/>
+		<property name="connectionLogEnabled" value="false"/>
+		<property name="dataSourceLogEnabled" value="false"/>
+		<property name="resultSetLogEnabled" value="false"/>
+	</bean>
+	
+	<bean id="log-filter-log4j" class="com.alibaba.druid.filter.logging.Log4jFilter">
+		<property name="statementLogEnabled" value="false" />
+		<property name="statementExecutableSqlLogEnable" value="false"/>
+		<property name="connectionLogEnabled" value="false"/>
+		<property name="dataSourceLogEnabled" value="false"/>
+		<property name="resultSetLogEnabled" value="false"/>
+	</bean>
+</beans>
