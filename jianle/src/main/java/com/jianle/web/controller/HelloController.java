@@ -42,4 +42,13 @@ public class HelloController {
         return map;
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/jsonList.json")
+    public Map<String, Object> getJsonList() {
+        List<BackstageOperLog> list = backstageOperLogService.findAll();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("list", list);
+        return map;
+    }
+
 }
